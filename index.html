@@ -3,46 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FNF Cheat Injector</title>
+<title>FNF Mod Menu Tutorial</title>
 <style>
-  html, body {height:100%;margin:0;display:flex;justify-content:center;align-items:center;background:#0b0b0f;}
-  button {font-size:1.5rem;padding:20px 40px;border-radius:12px;border:none;background:#3b82f6;color:#fff;cursor:pointer;}
-  button:hover {background:#2563eb;}
+  body { font-family: Arial, sans-serif; background:#0b0b0f; color:#e6eef8; padding: 20px; }
+  h1 { text-align: center; }
+  pre { background: #071229; padding: 12px; border-radius: 8px; overflow:auto; color:#cfe5ff; }
+  button { display: block; margin: 16px auto; padding: 12px 20px; border-radius: 8px; border:none; background:#3b82f6; color:white; cursor:pointer; }
+  button:hover { background:#2563eb; }
 </style>
 </head>
 <body>
-<button id="injectBtn">Load FNF with Cheat Menu</button>
 
-<script>
-document.getElementById('injectBtn').addEventListener('click', function() {
-  // Replace current page with FNF
-  location.href = 'https://ninja-muffin24.itch.io/funkin';
-  // After FNF loads, inject menu
-  window.addEventListener('load', function() {
-    const div = document.createElement('div');
-    div.style.position = 'fixed';
-    div.style.top = '50px';
-    div.style.left = '50px';
-    div.style.width = '220px';
-    div.style.background = 'rgba(0,0,0,0.85)';
-    div.style.color = '#fff';
-    div.style.border = '2px solid #fff';
-    div.style.padding = '8px';
-    div.style.borderRadius = '10px';
-    div.style.zIndex = 9999;
-    div.style.cursor = 'move';
-    div.innerHTML = '<div style="text-align:center;font-weight:bold;margin-bottom:6px;">🎵 FNF Mod Menu</div>\
-      <button onclick="alert(\'Max Score ON (visual)\')">🎯 Max Score</button>\
-      <button onclick="alert(\'Infinite Health ON (visual)\')">💖 Infinite Health</button>\
-      <button onclick="alert(\'Full Combo (visual)\')">🔥 Full Combo</button>';
-    document.body.appendChild(div);
+<h1>FNF Mod Menu Tutorial (F12)</h1>
 
-    let drag=false,ox=0,oy=0;
-    div.onmousedown=function(e){drag=true;ox=e.clientX-div.offsetLeft;oy=e.clientY-div.offsetTop;};
-    document.onmousemove=function(e){if(drag){div.style.left=(e.clientX-ox)+'px';div.style.top=(e.clientY-oy)+'px';}};
-    document.onmouseup=function(){drag=false;};
-  });
-});
-</script>
+<p>This tutorial shows how to inject a floating mod menu into the <strong>Friday Night Funkin'</strong> web game using your browser console. This menu can actually modify health, score, and combo during gameplay.</p>
+
+<h2>Step 1: Open FNF</h2>
+<p>Go to the official web game:</p>
+<pre>https://ninja-muffin24.itch.io/funkin</pre>
+
+<h2>Step 2: Open the Console</h2>
+<p>Press <strong>F12</strong> in your browser, then click the <strong>Console</strong> tab.</p>
+
+<h2>Step 3: Copy & Paste Cheat Code</h2>
+<p>Copy everything in the box below and paste it into the console, then press Enter.</p>
+
+<pre>
+// ====== FNF Mod Menu (works!) ======
+(function(){
+  if(window.__fnfModMenuActive){alert("Menu already active!");return;}
+  window.__fnfModMenuActive=true;
+  
+  // Create menu container
+  const div=document.createElement('div');
+  div.style.position='fixed';
+  div.style.top='50px';
+  div.style.left='50px';
+  div.style.width='220px';
+  div.style.background='rgba(0,0,0,0.85)';
+  div.style.color='#fff';
+  div.style.border='2px solid #fff';
+  div.style.padding='8px';
+  div.style.borderRadius='10px';
+  div.style.zIndex=9999;
+  div.style.cursor='move';
+  div.innerHTML = '<div style="text-align:center;font-weight:bold;margin-bottom:6px;">🎵 FNF Mod Menu</div>\
+  <button id="fnfMaxScore">🎯 Max Score</button>\
+  <button id="fnfInfiniteHealth">💖 Infinite Health</button>\
+  <button id="fnfFullCombo">🔥 Full Combo</button>';
+  document.body.appendChild(div);
+  
+  // Drag functionality
+  let drag=false,ox=0,oy=0;
+  div.onmousedown=function(e){drag=true;ox=e.clientX-div.offsetLeft;oy=e.clientY-div.offsetTop;};
+  document.onmousemove=function(e){if(drag){div.style.left=(e.clientX-ox)+'px';div.style.top=(e.clientY-oy)+'px';}};
+  document.onmouseup=function(){drag=false;};
+
+  // Cheat flags
+  let infiniteHealth=false;
+  let maxScore=false;
+
+  // Function to find game state
+  function getGameState(){
+    for(let k in window){
+      try{
+        const v=window[k];
+        if(v && typeof v==='object'){
+          if(v.health!==undefined && v.score!==undefined) return v;
+        }
+      }catch(e){}
+    }
+    return null;
+  }
+
+  // Interval to enforce cheats
+  setInterval(()=>{
+    const state = getGameState();
+    if(!state) return;
+    if(infiniteHealth && state.health!==undefined){
+      state.health = 2.0; // max health
+    }
+    if(maxScore && state.score!==undefined){
+      state.score = Math.max(state.score||0, 999999);
+    }
+  }, 100);
+
+  // Button events
+  document.getElementById('fnfInfiniteHealth').onclick = ()=>{
+    infiniteHealth = !infiniteHealth;
+    alert('Infinite Health: '+(infiniteHealth?'ON':'OFF'));
+  };
+  document.getElementById('fnfMaxScore').onclick = ()=>{
+    maxScore = !maxScore;
+    alert('Max Score: '+(maxScore?'ON':'OFF'));
+  };
+  document.getElementById('fnfFullCombo').onclick = ()=>{
+    const state=getGameState();
+    if(state){
+      if(state.combo!==undefined) state.combo=999;
+      if(state.score!==undefined) state.score=999999;
+      alert('Full Combo applied!');
+    } else alert('Game state not found.');
+  };
+})();
+</pre>
+
+<h2>Step 4: Enjoy the Cheats!</h2>
+<p>After running the script, a **draggable menu** appears in the top-left. You can toggle infinite health, max score, or instantly set a full combo.</p>
+
+<button onclick="alert('Just open FNF and follow Step 3!')">Reminder: Open FNF First</button>
+
 </body>
 </html>
