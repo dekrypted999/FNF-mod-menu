@@ -8,26 +8,38 @@
   body { font-family: Arial, sans-serif; background:#0b0b0f; color:#e6eef8; padding:20px; }
   h1 { text-align:center; }
   pre { background:#071229; padding:12px; border-radius:8px; overflow:auto; color:#cfe5ff; white-space: pre-wrap; word-wrap: break-word; }
-  button { display:block; margin:16px auto; padding:12px 20px; border-radius:8px; border:none; background:#3b82f6; color:white; cursor:pointer; font-size:1rem; }
-  button:hover { background:#2563eb; }
+  #copyBtn {
+    display:block;
+    margin:20px auto;
+    padding:16px 30px;
+    border-radius:10px;
+    border:none;
+    background:#3b82f6;
+    color:white;
+    cursor:pointer;
+    font-size:1.2rem;
+    font-weight:bold;
+  }
+  #copyBtn:hover { background:#2563eb; }
 </style>
 </head>
 <body>
 
 <h1>FNF Mod Menu Tutorial (F12)</h1>
 
-<p>This tutorial shows how to inject a **working cheat menu** into the <strong>Friday Night Funkin'</strong> web game using the browser console (F12). The menu can modify health, score, and combo.</p>
+<p>This tutorial shows how to inject a <strong>working cheat menu</strong> into the Friday Night Funkin' web game using the browser console (F12). The menu can modify health, score, and combo.</p>
 
-<h2>Step 1: Open the FNF Web Game</h2>
-<p>Go to the official FNF web page:</p>
+<h2>Step 1: Open FNF</h2>
+<p>Go to the official web page:</p>
 <pre>https://ninja-muffin24.itch.io/funkin</pre>
 
 <h2>Step 2: Open the Console</h2>
 <p>Press <strong>F12</strong> (or right-click → Inspect → Console tab).</p>
 
 <h2>Step 3: Copy the Script</h2>
-<p>Click the button below to copy the full cheat code to your clipboard. Then paste it into the console and press Enter.</p>
-<button id="copyBtn">Copy Cheat Script</button>
+<p>Click the button below to copy the cheat script to your clipboard, then paste it into the console and press Enter.</p>
+
+<button id="copyBtn">📋 Copy Cheat Script</button>
 
 <pre id="cheatScript">
 // ===== FNF Mod Menu Script =====
@@ -100,10 +112,10 @@
 </pre>
 
 <h2>Step 4: Use the Mod Menu</h2>
-<p>After pasting the script into the console, a **draggable menu** will appear. Click buttons to:</p>
+<p>After pasting the script into the console, a **draggable menu** will appear. Use it to toggle:</p>
 <ul>
-<li>🎯 Max Score → keep your score very high</li>
-<li>💖 Infinite Health → prevent dying</li>
+<li>🎯 Max Score → extremely high score</li>
+<li>💖 Infinite Health → prevents dying</li>
 <li>🔥 Full Combo → instantly max combo and score</li>
 </ul>
 
@@ -113,10 +125,11 @@ document.getElementById('copyBtn').addEventListener('click', function() {
   navigator.clipboard.writeText(scriptText).then(()=>{
     alert('Cheat script copied! Now paste it into the FNF console.');
   }).catch(()=>{
-    alert('Failed to copy. Select the code manually and copy.');
+    alert('Failed to copy. Please select the code manually.');
   });
 });
 </script>
 
 </body>
 </html>
+
