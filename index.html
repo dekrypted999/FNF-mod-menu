@@ -1,98 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>FNF Mod Menu Bookmarklet — Tutorial</title>
-  <style>
-    body{font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;margin:0;padding:24px;background:#0b0b0f;color:#e6eef8}
-    header{max-width:900px;margin:0 auto 18px}
-    main{max-width:900px;margin:0 auto;background:#081026;padding:20px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.6)}
-    h1{margin:0 0 8px;font-size:1.6rem}
-    p{line-height:1.45;color:#cfe5ff}
-    .code{background:#071229;padding:12px;border-radius:8px;overflow:auto;border:1px solid rgba(255,255,255,.04);font-family:SFMono-Regular,Menlo,Monaco,monospace;font-size:13px}
-    .btn{display:inline-block;padding:8px 12px;background:#3b82f6;color:#fff;border-radius:8px;text-decoration:none;margin-top:8px}
-    .warn{background:#20100f;color:#ffd7d7;padding:10px;border-radius:8px;margin:8px 0}
-    label{display:block;margin-top:12px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inject FNF Mod Menu</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #0b0b0f; color: #e6eef8; text-align: center; padding: 40px; }
+  button { font-size: 1rem; padding: 12px 20px; border-radius: 8px; border: none; background: #3b82f6; color: white; cursor: pointer; }
+  button:hover { background: #2563eb; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>FNF Mod Menu — Bookmarklet Tutorial</h1>
-    <p>This page shows how to install a <strong>bookmarklet</strong> that injects a floating FNF mod menu overlay into the FNF web build. The bookmarklet runs in your browser on your machine only (client-side).</p>
-  </header>
 
-  <main>
-    <section>
-      <h2>Important notes / safety</h2>
-      <div class="warn">
-        <strong>Limits:</strong> This injects client-side code only. It <em>may not</em> be able to change the game's internal logic on every web build (minified/encapsulated builds can block it). Use responsibly — only on single-player builds you own or run locally.
-      </div>
-      <p>The example here is a <em>best-effort</em> injector. If it can't find the game's internal state it will still show the floating UI and try non-destructive visual effects.</p>
-    </section>
+<h1>Inject FNF Mod Menu</h1>
+<p>Click the button below to add the floating cheat menu directly into the FNF website.</p>
+<button id="injectBtn">Inject Cheat Menu</button>
 
-    <section>
-      <h2>1) Open the game page</h2>
-      <p>Open the Friday Night Funkin' web page in Edge (or Chrome/Firefox):</p>
-      <p class="code">https://ninja-muffin24.itch.io/funkin</p>
-    </section>
+<script>
+document.getElementById('injectBtn').addEventListener('click', function() {
+  const url = 'https://ninja-muffin24.itch.io/funkin';
+  const win = window.open(url, '_blank');
+  win.focus();
 
-    <section>
-      <h2>2) Click to install the bookmarklet</h2>
-      <p>Edge: <em>Favorites</em> → <em>Add favorite</em>, then paste the bookmarklet code into the URL field. Or create a new favorite and edit the URL.
-      </p>
+  win.addEventListener('load', function() {
+    // Wait a few seconds for the page to fully load
+    setTimeout(() => {
+      win.eval(`
+        if(window.__fnfMenuInjected){alert('Menu already injected!');}else{
+          window.__fnfMenuInjected=true;
+          const div=document.createElement('div');
+          div.style.position='fixed';
+          div.style.top='50px';
+          div.style.left='50px';
+          div.style.width='220px';
+          div.style.background='rgba(0,0,0,0.85)';
+          div.style.color='#fff';
+          div.style.border='2px solid #fff';
+          div.style.padding='8px';
+          div.style.borderRadius='10px';
+          div.style.zIndex=9999;
+          div.style.cursor='move';
+          div.innerHTML='<div style="text-align:center;font-weight:bold;margin-bottom:6px;">🎵 FNF Mod Menu</div>\
+            <button onclick="alert(\\'Max Score ON (visual)\\')">🎯 Max Score</button>\
+            <button onclick="alert(\\'Infinite Health ON (visual)\\')">💖 Infinite Health</button>\
+            <button onclick="alert(\\'Full Combo (visual)\\')">🔥 Full Combo</button>';
+          document.body.appendChild(div);
+          let drag=false,ox=0,oy=0;
+          div.onmousedown=function(e){drag=true;ox=e.clientX-div.offsetLeft;oy=e.clientY-div.offsetTop;};
+          document.onmousemove=function(e){if(drag){div.style.left=(e.clientX-ox)+'px';div.style.top=(e.clientY-oy)+'px';}};
+          document.onmouseup=function(){drag=false;};
+        }
+      `);
+    }, 3000); // wait 3s for page to load
+  });
+});
+</script>
 
-      <p><a class="btn" id="installLink" href="javascript:(function(){if(window.__fnfInjectorActive){console.log('Injector already active');return;}window.__fnfInjectorActive=true;console.log('FNF injector start');var state={patched:[],intervals:[],infiniteHealth:false,maxScore:false};function patch(obj,name,wrapper){try{if(!obj||!name||typeof obj[name]!=='function')return false; if(!obj.__orig)obj.__orig={}; if(!obj.__orig[name])obj.__orig[name]=obj[name]; obj[name]=wrapper(obj.__orig[name]); state.patched.push({obj,name}); console.log('patched',name); return true}catch(e){return false}}function tryPatchPrototypes(){var tried=[];for(var k in window)try{var v=window[k]; if(!v)continue; if((typeof v==='function'||typeof v==='object')&&v.prototype){var proto=v.prototype;['goodNoteHit','noteHit','hitNote','onNoteHit','onNote','opponentNoteHit'].forEach(function(fnName){if(typeof proto[fnName]==='function'){patch(proto,fnName,function(orig){return function(){try{orig.apply(this,arguments);}catch(e){} try{ if(this&&typeof this.health!=='undefined'){ if(typeof this.healthMax!=='undefined')this.health=Math.min(this.healthMax,Math.max(this.health,1.5)); else this.health=Math.max(this.health,1.5);} if(this&&typeof this.score!=='undefined'){this.score=(this.score||0)+1000;} if(this&&typeof this.combo!=='undefined'){this.combo=(this.combo||0)+1;} }catch(e){} };}); tried.push({ctor:k,method:fnName});}})}catch(e){} }console.log('proto patch attempts',tried);return tried.length>0}function scanForState(){var found=null;for(var k in window)try{var v=window[k]; if(!v)continue; if(typeof v==='object'){ if((typeof v.health!=='undefined'&&typeof v.score!=='undefined')||(v.song||v.currentSong||v.curSong)){found={name:k,obj:v};break;}}}catch(e){} }return found}function enforceStateFlags(target){try{if(!target)return; if(state.infiniteHealth){ if(typeof target.obj.health!=='undefined'){ if(typeof target.obj.healthMax!=='undefined')target.obj.health=target.obj.healthMax; else target.obj.health=2.0; }} if(state.maxScore){ if(typeof target.obj.score!=='undefined'){ target.obj.score=Math.max(target.obj.score||0,999999);} if(typeof target.obj.combo!=='undefined'){ target.obj.combo=Math.max(target.obj.combo||0,999);} }}catch(e){} }function tryUnlocks(){var modified=[];for(var k in window)try{var v=window[k]; if(!v||typeof v!=='object')continue; if(Array.isArray(v.songs)||Array.isArray(v.SONGS)){try{v.songs=v.songs.map(function(s){try{return Object.assign({},s,{unlocked:true});}catch(e){return s;}});modified.push(k+'.songs');}catch(e){} } if(v.skins&&typeof v.skins==='object'){try{Object.keys(v.skins).forEach(function(s){try{v.skins[s].unlocked=true;}catch(e){}});modified.push(k+'.skins');}catch(e){} } if(v.unlockedSongs===false){v.unlockedSongs=true;modified.push(k+'.unlockedSongs');}}catch(e){}console.log('unlock attempts applied',modified);return modified.length>0}function createUI(){if(document.getElementById('__fnfModMenu'))return;var div=document.createElement('div');div.id='__fnfModMenu';div.style.position='fixed';div.style.top='60px';div.style.left='60px';div.style.width='230px';div.style.background='rgba(0,0,0,0.85)';div.style.color='#fff';div.style.border='2px solid #fff';div.style.padding='8px';div.style.borderRadius='10px';div.style.zIndex=2147483647;div.style.cursor='move';div.innerHTML='<div style="text-align:center;font-weight:bold;margin-bottom:6px;">🎵 FNF Injector</div><button id="fnf_maxScore" style="width:100%;margin:3px;">Toggle Max Score</button><button id="fnf_infiniteHealth" style="width:100%;margin:3px;">Toggle Infinite Health</button><button id="fnf_fullCombo" style="width:100%;margin:3px;">Full Combo (attempt)</button><button id="fnf_unlock" style="width:100%;margin:3px;">Try Unlock Songs/Skins</button><button id="fnf_stop" style="width:100%;margin:3px;background:#c33;">Stop & Undo</button><div style="font-size:11px;margin-top:6px;text-align:center;color:#ddd;">Console will show actions</div>';document.body.appendChild(div);var dragging=false,offX=0,offY=0;div.addEventListener('mousedown',function(e){dragging=true;offX=e.clientX-div.offsetLeft;offY=e.clientY-div.offsetTop;});document.addEventListener('mousemove',function(e){if(dragging){div.style.left=(e.clientX-offX)+'px';div.style.top=(e.clientY-offY)+'px';}});document.addEventListener('mouseup',function(){dragging=false;});document.getElementById('fnf_maxScore').addEventListener('click',function(){state.maxScore=!state.maxScore;console.log('Max Score ->',state.maxScore);alert('Max Score: '+(state.maxScore?'ON':'OFF'));});document.getElementById('fnf_infiniteHealth').addEventListener('click',function(){state.infiniteHealth=!state.infiniteHealth;console.log('Infinite Health ->',state.infiniteHealth);alert('Infinite Health: '+(state.infiniteHealth?'ON':'OFF'));});document.getElementById('fnf_fullCombo').addEventListener('click',function(){var s=scanForState();if(s){try{s.obj.combo=Math.max(s.obj.combo||0,999);s.obj.score=Math.max(s.obj.score||0,999999);alert('Full combo attempted!');}catch(e){alert('Failed to set combo directly — check console.');console.error(e);}}else alert('Game state not found — check console.');});document.getElementById('fnf_unlock').addEventListener('click',function(){var ok=tryUnlocks();alert(ok? 'Unlock attempts applied (see console)':'Nothing to unlock found (see console).');});document.getElementById('fnf_stop').addEventListener('click',function(){state.intervals.forEach(function(id){clearInterval(id);});state.intervals=[];state.patched.forEach(function(p){try{if(p.obj&&p.obj.__orig&&p.obj.__orig[p.name])p.obj[p.name]=p.obj.__orig[p.name];}catch(e){} });state.patched=[];window.__fnfInjectorActive=false;var elem=document.getElementById('__fnfModMenu');if(elem)elem.remove();console.log('Injector stopped');alert('Injector stopped.');});}
-var protoPatched=tryPatchPrototypes();if(!protoPatched)console.log('No prototype hooks found immediately.');var enforceInterval=setInterval(function(){var s=scanForState();if(s)enforceStateFlags(s);},300);state.intervals.push(enforceInterval);var retryPatchInterval=setInterval(function(){tryPatchPrototypes();},2500);state.intervals.push(retryPatchInterval);createUI();console.log('Injector UI created');})();">Install bookmarklet: Click &amp; Save as Favorite</a>
-
-      <p style="margin-top:10px;color:#cfe5ff">If Edge blocks clicking the link, copy the code shown in the box below and paste it as the <strong>URL</strong> when you add a new favorite.</p>
-    </section>
-
-    <section>
-      <h2>3) Full readable script (for inspection)</h2>
-      <p class="code">Copy this into a file or read before installing the bookmarklet. It is the same injector but formatted for readability.</p>
-      <pre class="code" style="margin-top:8px;max-height:360px;">// FNF Injector - Best-effort client-side hooks (console/bookmarklet)
-(function(){
-  if (window.__fnfInjectorActive) { console.log("FNF Injector already active"); return; }
-  window.__fnfInjectorActive = true;
-  console.log("FNF Injector starting — best-effort. See messages below.");
-
-  const state = { patched: [], intervals: [], infiniteHealth: false, maxScore: false };
-
-  function patch(obj, name, wrapper) { /* ... see bookmarklet for full code ... */ }
-  function tryPatchPrototypes() { /* patches common prototype hooks like goodNoteHit/noteHit */ }
-  function scanForState() { /* scans window for an object that looks like a running game state */ }
-  function enforceStateFlags(target) { /* enforces infinite health / max score flags on the found state */ }
-  function tryUnlocks() { /* best-effort: try to set song/skin unlock flags if found */ }
-  function createUI() { /* creates the floating draggable UI with toggles and stop button */ }
-
-  tryPatchPrototypes();
-  state.intervals.push(setInterval(()=>{ const s=scanForState(); if(s) enforceStateFlags(s); },300));
-  state.intervals.push(setInterval(tryPatchPrototypes,2500));
-  createUI();
-  console.log('FNF Injector UI created.');
-})();</pre>
-
-    </section>
-
-    <section>
-      <h2>4) How to use after installing</h2>
-      <ol>
-        <li>Open the FNF page: <span class="code">https://ninja-muffin24.itch.io/funkin</span></li>
-        <li>Click the favorite/bookmark you created with the bookmarklet code.</li>
-        <li>The floating <em>FNF Injector</em> UI should appear — use toggles.</li>
-        <li>If nothing works, open the Edge Console (F12 → Console) and look for logs — the injector prints diagnostic messages.</li>
-      </ol>
-    </section>
-
-    <section>
-      <h2>5) Want it hosted on GitHub Pages?</h2>
-      <p>Save this file as <code>index.html</code>, push to a public repo, then enable GitHub Pages (see earlier instructions). The bookmarklet will still work when clicked on the FNF site.</p>
-    </section>
-
-    <footer style="margin-top:18px;color:#9fc9ff;font-size:13px">
-      Made for demonstration &amp; learning. If you want a custom injector tuned to the current FNF web build, open DevTools and copy <code>Object.keys(window).slice(0,400)</code> into this page or paste it in a chat — I can help tailor the patch.
-    </footer>
-  </main>
 </body>
 </html>
+
