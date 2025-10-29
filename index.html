@@ -5,70 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FNF Cheat Injector</title>
 <style>
-  html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #0b0b0f;
-  }
-  button {
-    font-size: 1.5rem;
-    padding: 20px 40px;
-    border-radius: 12px;
-    border: none;
-    background: #3b82f6;
-    color: #fff;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #2563eb;
-  }
+  html, body {height:100%;margin:0;display:flex;justify-content:center;align-items:center;background:#0b0b0f;}
+  button {font-size:1.5rem;padding:20px 40px;border-radius:12px;border:none;background:#3b82f6;color:#fff;cursor:pointer;}
+  button:hover {background:#2563eb;}
 </style>
 </head>
 <body>
-<button id="injectBtn">Open FNF with Cheat Menu</button>
+<button id="injectBtn">Load FNF with Cheat Menu</button>
 
 <script>
 document.getElementById('injectBtn').addEventListener('click', function() {
-  const win = window.open('https://ninja-muffin24.itch.io/funkin', '_blank');
-  win.focus();
+  // Replace current page with FNF
+  location.href = 'https://ninja-muffin24.itch.io/funkin';
+  // After FNF loads, inject menu
+  window.addEventListener('load', function() {
+    const div = document.createElement('div');
+    div.style.position = 'fixed';
+    div.style.top = '50px';
+    div.style.left = '50px';
+    div.style.width = '220px';
+    div.style.background = 'rgba(0,0,0,0.85)';
+    div.style.color = '#fff';
+    div.style.border = '2px solid #fff';
+    div.style.padding = '8px';
+    div.style.borderRadius = '10px';
+    div.style.zIndex = 9999;
+    div.style.cursor = 'move';
+    div.innerHTML = '<div style="text-align:center;font-weight:bold;margin-bottom:6px;">🎵 FNF Mod Menu</div>\
+      <button onclick="alert(\'Max Score ON (visual)\')">🎯 Max Score</button>\
+      <button onclick="alert(\'Infinite Health ON (visual)\')">💖 Infinite Health</button>\
+      <button onclick="alert(\'Full Combo (visual)\')">🔥 Full Combo</button>';
+    document.body.appendChild(div);
 
-  // Give it a few seconds to load
-  const interval = setInterval(() => {
-    try {
-      if (win.document.body) {
-        clearInterval(interval);
-        win.eval(`
-          if(!window.__fnfMenuInjected){
-            window.__fnfMenuInjected = true;
-            const div=document.createElement('div');
-            div.style.position='fixed';
-            div.style.top='50px';
-            div.style.left='50px';
-            div.style.width='220px';
-            div.style.background='rgba(0,0,0,0.85)';
-            div.style.color='#fff';
-            div.style.border='2px solid #fff';
-            div.style.padding='8px';
-            div.style.borderRadius='10px';
-            div.style.zIndex=9999;
-            div.style.cursor='move';
-            div.innerHTML='<div style="text-align:center;font-weight:bold;margin-bottom:6px;">🎵 FNF Mod Menu</div>\
-              <button onclick="alert(\\'Max Score ON (visual)\\')">🎯 Max Score</button>\
-              <button onclick="alert(\\'Infinite Health ON (visual)\\')">💖 Infinite Health</button>\
-              <button onclick="alert(\\'Full Combo (visual)\\')">🔥 Full Combo</button>';
-            document.body.appendChild(div);
-            let drag=false,ox=0,oy=0;
-            div.onmousedown=function(e){drag=true;ox=e.clientX-div.offsetLeft;oy=e.clientY-div.offsetTop;};
-            document.onmousemove=function(e){if(drag){div.style.left=(e.clientX-ox)+'px';div.style.top=(e.clientY-oy)+'px';}};
-            document.onmouseup=function(){drag=false;};
-          }
-        `);
-      }
-    } catch(e){}
-  }, 500);
+    let drag=false,ox=0,oy=0;
+    div.onmousedown=function(e){drag=true;ox=e.clientX-div.offsetLeft;oy=e.clientY-div.offsetTop;};
+    document.onmousemove=function(e){if(drag){div.style.left=(e.clientX-ox)+'px';div.style.top=(e.clientY-oy)+'px';}};
+    document.onmouseup=function(){drag=false;};
+  });
 });
 </script>
 </body>
