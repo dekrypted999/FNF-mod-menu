@@ -5,31 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FNF F12 Mod Menu Tutorial</title>
 <style>
-  body { font-family: Arial, sans-serif; background:#0b0b0f; color:#e6eef8; padding:20px; }
-  h1 { text-align:center; }
-  pre { background:#071229; padding:12px; border-radius:8px; overflow:auto; color:#cfe5ff; }
-  button { display:block; margin:16px auto; padding:12px 20px; border-radius:8px; border:none; background:#3b82f6; color:white; cursor:pointer; }
-  button:hover { background:#2563eb; }
+  body { font-family: Arial, sans-serif; background: #0b0b0f; color: #e6eef8; padding: 20px; }
+  h1 { text-align: center; }
+  pre { background: #071229; padding: 12px; border-radius: 8px; overflow-x: auto; color: #cfe5ff; }
+  button { display: block; margin: 16px auto; padding: 12px 20px; border-radius: 8px; border: none; background: #3b82f6; color: white; cursor: pointer; }
+  button:hover { background: #2563eb; }
 </style>
 </head>
 <body>
 
 <h1>FNF Mod Menu Tutorial (F12)</h1>
 
-<p>This tutorial shows you how to inject a **working cheat menu** into <strong>Friday Night Funkin'</strong> using the browser console (F12). The menu allows you to modify health, score, and combo in real-time.</p>
+<p>This tutorial will show you how to inject a **working mod menu** into the <strong>Friday Night Funkin'</strong> web game using your browser console (F12). You can modify health, score, and combo during gameplay.</p>
 
-<h2>Step 1: Open the FNF Web Game</h2>
-<p>Go to the official FNF web page:</p>
+<h2>Step 1: Open FNF Web Game</h2>
+<p>Go to:</p>
 <pre>https://ninja-muffin24.itch.io/funkin</pre>
 
-<h2>Step 2: Open the Console</h2>
+<h2>Step 2: Open Console</h2>
 <p>Press <strong>F12</strong> (or right-click → Inspect → Console tab).</p>
 
-<h2>Step 3: Copy & Paste This Code</h2>
-<p>Copy everything below and paste it into the console, then press Enter:</p>
+<h2>Step 3: Copy & Paste Cheat Code</h2>
+<p>Copy everything in the box below and paste it into the console, then press Enter:</p>
 
 <pre>
-// ===== FNF Mod Menu Script =====
 (function(){
   if(window.__fnfModMenuActive){alert("Menu already active!"); return;}
   window.__fnfModMenuActive=true;
@@ -46,13 +45,13 @@
   div.style.borderRadius='10px';
   div.style.zIndex=9999;
   div.style.cursor='move';
-  div.innerHTML = '<div style="text-align:center;font-weight:bold;margin-bottom:6px;">🎵 FNF Mod Menu</div>' +
-                  '<button id="fnfMaxScore">🎯 Max Score</button>' +
-                  '<button id="fnfInfiniteHealth">💖 Infinite Health</button>' +
-                  '<button id="fnfFullCombo">🔥 Full Combo</button>';
+  div.innerHTML = '&lt;div style="text-align:center;font-weight:bold;margin-bottom:6px;"&gt;🎵 FNF Mod Menu&lt;/div&gt;' +
+                  '&lt;button id="fnfMaxScore"&gt;🎯 Max Score&lt;/button&gt;' +
+                  '&lt;button id="fnfInfiniteHealth"&gt;💖 Infinite Health&lt;/button&gt;' +
+                  '&lt;button id="fnfFullCombo"&gt;🔥 Full Combo&lt;/button&gt;';
   document.body.appendChild(div);
 
-  let drag=false,ox=0,oy=0;
+  let drag=false, ox=0, oy=0;
   div.onmousedown=function(e){drag=true;ox=e.clientX-div.offsetLeft;oy=e.clientY-div.offsetTop;};
   document.onmousemove=function(e){if(drag){div.style.left=(e.clientX-ox)+'px';div.style.top=(e.clientY-oy)+'px';}};
   document.onmouseup=function(){drag=false;};
@@ -98,12 +97,12 @@
 })();
 </pre>
 
-<h2>Step 4: Use the Mod Menu</h2>
-<p>After pasting, a **draggable menu** appears on the FNF page. Use the buttons to:</p>
+<h2>Step 4: Use the Menu</h2>
+<p>After pasting, a **draggable menu** appears on the FNF page. Buttons do the following:</p>
 <ul>
-<li>🎯 Max Score → continuously maxes your score</li>
-<li>💖 Infinite Health → prevents dying</li>
-<li>🔥 Full Combo → instantly maxes combo and score</li>
+  <li>🎯 Max Score → keeps your score extremely high</li>
+  <li>💖 Infinite Health → prevents dying</li>
+  <li>🔥 Full Combo → instantly maxes combo and score</li>
 </ul>
 
 </body>
