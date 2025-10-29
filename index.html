@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FNF Floating Mod Menu</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff4c4c, #fffc4c);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #modMenu {
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    width: 220px;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: move;
+    z-index: 9999;
+  }
+
+  #modMenu h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    text-align: center;
+    text-shadow: 1px 1px #000;
+  }
+
+  #modMenu button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 0.5rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #fff;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: transform 0.2s, background 0.2s;
+    cursor: pointer;
+  }
+
+  #modMenu button:hover {
+    transform: scale(1.05);
+    background: rgba(255,255,255,0.2);
+  }
+</style>
+</head>
+<body>
+
+<div id="modMenu">
+  <h2>🎵 FNF Mod Menu</h2>
+  <button onclick="maxScore()">🎯 Max Score</button>
+  <button onclick="infiniteHealth()">💖 Infinite Health</button>
+  <button onclick="unlockAllSongs()">🎵 Unlock All Songs</button>
+  <button onclick="unlockAllSkins()">👕 Unlock All Skins</button>
+  <button onclick="fullCombo()">🔥 Full Combo</button>
+  <button onclick="speedControl()">⚡ Speed Control</button>
+  <button onclick="memeEffects()">🎉 Meme Effects</button>
+  <button onclick="practiceMode()">🛠 Practice Mode</button>
+</div>
+
+<script>
+const menu = document.getElementById('modMenu');
+let isDragging = false;
+let offsetX, offsetY;
+
+menu.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  offsetX = e.clientX - menu.offsetLeft;
+  offsetY = e.clientY - menu.offsetTop;
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    menu.style.left = e.clientX - offsetX + 'px';
+    menu.style.top = e.clientY - offsetY + 'px';
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+
+function randomColor() {
+  return '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function showMessage(msg) {
+  const p = document.createElement('p');
+  p.textContent = msg;
+  p.style.fontWeight = 'bold';
+  p.style.fontSize = '1rem';
+  p.style.position = 'fixed';
+  p.style.bottom = '20px';
+  p.style.left = '50%';
+  p.style.transform = 'translateX(-50%)';
+  p.style.background = 'rgba(0,0,0,0.7)';
+  p.style.color = '#fff';
+  p.style.padding = '0.5rem 1rem';
+  p.style.borderRadius = '10px';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 2500);
+}
+
+function maxScore() { showMessage("🎯 Max Score activated! Perfect notes everywhere!"); }
+function infiniteHealth() { showMessage("💖 Infinite Health activated! You can't lose!"); }
+function unlockAllSongs() { showMessage("🎵 All songs unlocked! Time to jam!"); }
+function unlockAllSkins() { showMessage("👕 All skins unlocked! Customize away!"); }
+function fullCombo() { showMessage("🔥 Full Combo! Every note hit perfectly!"); }
+function speedControl() {
+  const speed = prompt("Enter speed multiplier (0.5 = slow, 2 = fast):", "1");
+  showMessage(`⚡ Speed set to x${speed}!`);
+}
+function memeEffects() {
+  document.body.style.background = `linear-gradient(135deg, ${randomColor()}, ${randomColor()})`;
+  showMessage("🎉 Meme Effects activated! Colors are wild!");
+}
+function practiceMode() { showMessage("🛠 Practice Mode activated! Loop tricky sections endlessly!"); }
+</script>
+
+</body>
+</html>
